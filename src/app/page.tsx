@@ -9,10 +9,14 @@ import Portfolio from '../components/Portfolio';
 import LiveFeed from '../components/LiveFeed';
 import NFTModal from '../components/NFTModal';
 import Cart from '../components/Cart';
+import LandingHero from '../components/LandingHero';
 
 export default function Home() {
-  const { activeView } = useStore();
+  const { activeView, connectedWallet } = useStore();
   const [mounted, setMounted] = useState(false);
+  const [readOnlyMode, setReadOnlyMode] = useState(false);
+
+  const entered = readOnlyMode || !!connectedWallet;
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -31,6 +35,10 @@ export default function Home() {
         </div>
       </div>
     );
+  }
+
+  if (!entered) {
+    return <LandingHero onEnter={() => setReadOnlyMode(true)} />;
   }
 
   return (
